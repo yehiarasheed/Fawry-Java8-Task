@@ -34,15 +34,11 @@ public class LambdaExample {
         // TODO With functional interfaces declared
         Predicate<User> ageGreaterThanFivePredicate = new Predicate<User>() {
             @Override
-            public boolean test(User user) {
-                return user.age>5;
-            }
+            public boolean test(User user) {return user.age>5;}
         };
         Comparator<User> sortByNameComparator = new Comparator<User>() {
             @Override
-            public int compare(User u1, User u2) {
-                return u1.name.compareTo(u2.name);
-            }
+            public int compare(User u1, User u2) {return u1.name.compareTo(u2.name);}
         };
         repository.select(ageGreaterThanFivePredicate, sortByNameComparator);
 
@@ -52,15 +48,32 @@ public class LambdaExample {
 
         banner("Listing users with age < 10 sorted by age");
         // TODO With functional interfaces declared
+        Predicate<User> ageLessThanTenPredicate = new Predicate<User>() {
+            @Override
+            public boolean test(User user) {return user.age<10;}
+        };
+        Comparator<User> sortByAgeComparator = new Comparator<User>() {
+            @Override
+            public int compare(User u1, User u2) {return u1.age - u2.age;}
+        };
+        repository.select(ageLessThanTenPredicate, sortByAgeComparator);
 
         banner("Listing users with age < 10 sorted by age - lambda");
         // TODO With functional interfaces used directly
+        repository.select(user -> user.age < 10, sortByAgeComparator);
 
         banner("Listing active users sorted by name");
         // TODO With functional interfaces declared
+        Predicate<User> activeUsersPredicate = new Predicate<User>() {
+            @Override
+            public boolean test(User user) {return user.active;}
+        };
+        repository.select(activeUsersPredicate,sortByNameComparator);
+
 
         banner("Listing active users sorted by name - lambda");
         // TODO With functional interfaces used directly
+        repository.select(user -> user.active, sortByNameComparator);
 
         banner("Listing active users with age > 8 sorted by name");
         // TODO With functional interfaces declared
