@@ -54,16 +54,12 @@ public class StreamsExample {
         // TODO With functional interfaces declared
         Predicate<Book> publishedBookPredicate = new Predicate<Book>() {
             @Override
-            public boolean test(Book book) {
-                return book.published;
-            }
+            public boolean test(Book book) {return book.published;}
         };
 
         Consumer<Book> printBookConsumer = new Consumer<Book>() {
             @Override
-            public void accept(Book book) {
-                System.out.println(book);
-            }
+            public void accept(Book book) {System.out.println(book);}
         };
 
         authors.stream()
@@ -82,9 +78,7 @@ public class StreamsExample {
         // TODO With functional interfaces declared
         ToIntFunction<Book> bookPriceFunction = new ToIntFunction<Book>() {
             @Override
-            public int applyAsInt(Book book) {
-                return book.price;
-            }
+            public int applyAsInt(Book book) {return book.price;}
         };
 
         double averagePrice = authors.stream()
@@ -107,10 +101,21 @@ public class StreamsExample {
 
         banner("Active authors that have at least one published book");
         // TODO With functional interfaces declared
+        Predicate<Author> activeAuthorWithPublishedBooksPredicate = new Predicate<Author>() {
+            @Override
+            public boolean test(Author author) { return author.active && author.books.stream().anyMatch(publishedBookPredicate); }
+        };
+        authors
+                .stream()
+                .filter(activeAuthorWithPublishedBooksPredicate)
+                .forEach(authorPrintConsumer);
 
         banner("Active authors that have at least one published book - lambda");
         // TODO With functional interfaces used directly
-
+        authors
+                .stream()
+                .filter(author -> author.active && author.books.stream().anyMatch(book -> book.published))
+                .forEach(System.out::println);
     }
 
     private static void banner(final String m) {
